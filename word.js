@@ -22,11 +22,8 @@ var Word = function(answer) {
     }
 }
 
-
 module.exports = Word;
 
-
-var words = ["Jurassic Park", "Star Wars", "Frozen"]
 
 
 // function randomWordGen() {
