@@ -37,6 +37,31 @@ function theLogic() {
         requireNewWord = false;
 
     }
+    var completeWord = [];
+    chosenWord.objArray.forEach(completeCheck);
+    if (completeWord.includes(false)) {
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "Guess this Philadelphia word",
+                name: "userGuess"
+            }
+        ]).then(function(input) {
+            if (!letterArray.includes(input.userGuess) || input.userGuess.length > 1) {
+                console.log("\nPlease try again!\n");
+                theLogic();
+            }
+            else {
+                if(incorrectLetters.includes(input.userGuess) || correctLetters.includes(input.userGuess) || input.userGuess === "") {
+                    console.log("\nAlready guessed or nothing entered\n");
+                }
+            }
+
+
+        })
+    }else {
+        console.log("YOU'RE A WINNER!\n");
+    }
 }
 // var checkWinOrLose = "start"
 // function startGame() {
