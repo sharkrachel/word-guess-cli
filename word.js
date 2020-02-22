@@ -1,25 +1,27 @@
-var Letter = require("./letter");
-// contains a constructor
+var Letter = require("./letter.js");
 
-var Word = function(answer) {
-    this.objArray = [];
+function Word(answer) {
+  //Letter objects array
+  this.objArray = [];
 
-    for(var i = 0; i < answer.length; i++){
-        var letter = new Letter(answer[i]);
-        this.objArray.push(letter);
+  for (var i = 0; i < answer.length; i++) {
+    var letter = new Letter(answer[i]);
+    this.objArray.push(letter);
+  }
+
+  this.log = function() {
+    answerLog = "";
+    for (var i = 0; i < this.objArray.length; i++) {
+      answerLog += this.objArray[i] + " ";
     }
-    this.log = function() {
-        var answerLog = "";
-        for(var i = 0; i < this.objArray.length; i++) {
-            answerLog += this.objArray[i] + " ";
-        }
-        console.log(answerLog + "\n===================\n");
+    console.log(answerLog + "\n========================\n");
+  };
+
+  this.userGuess = function(input) {
+    for (var i = 0; i < this.objArray.length; i++) {
+      this.objArray[i].guess(input);
     }
-    this.userInput = function(input) {
-        for (var i = 0; i < this.objArray.length; i++) {
-            this.objArray[i].guess(input);
-        }
-    }
+  };
 }
 
 module.exports = Word;

@@ -1,68 +1,161 @@
-var Word = require("./word");
+var Word = require("./word.js");
 var inquirer = require("inquirer");
 
-var letterArray = ["abcdefghijklmnopqrstuvwxyz"];
+// letters entry
+var letterArray = "abcdefghijklmnopqrstuvwxyz";
 
+// List of words to choose from
 var philadelphia = [
-    "gritty",
-    "center city",
-    "old city",
-    "liberty bell",
-    "ben franklin",
-    "the eagles", 
-    "philly cheesesteaks",
-    "soft pretzels",
-    "walt whitman",
-    "muhammad ali"
+"gritty",
+"old city",
+"liberty bell",
+"ben franklin",
+"the eagles",
+"center city",
+"brotherly love",
+"philly cheesesteak",
+"soft pretzel"
 ];
 
-var randomGen = Math.floor(Math.random() * philadelphia.length);
+// Pick Random index from philadelphia array
+var randomWordGen = Math.floor(Math.random() * philadelphia.length);
+var randomWord = philadelphia[randomWordGen];
 
-var randomWord = philadelphia[randomGen];
-
-var chosenWord = new Word(randomWord);
+// Pass random word through Word constructor
+var selectedWord = new Word(randomWord);
 
 var requireNewWord = false;
+
+// Array for guessed letters
 var incorrectLetters = [];
 var correctLetters = [];
 
-var guessesLeft = 10
+// Guesses left
+var remainingGuesses = 10;
 
 function theLogic() {
-    if (requireNewWord) {
-        var randomGen = Math.floor(Math.random() * philadelphia.length);
+  // Generates new word for Word constructor if true
+  if (requireNewWord) {
+    // Selects random philadelphia array
+    var randomWordGen = Math.floor(Math.random() * philadelphia.length);
+    var randomWord = philadelphia[randomWordGen];
 
-        var randomWord = philadelphia[randomGen];
-        var chosenWord = new Word(randomWord);
-        requireNewWord = false;
+    // Passes random word through the Word constructor
+    selectedWord = new Word(randomWord);
 
-    }
-    var completeWord = [];
-    chosenWord.objArray.forEach(completeCheck);
-    if (completeWord.includes(false)) {
-        inquirer.prompt([
-            {
-                type: "input",
-                message: "Guess this Philadelphia word",
-                name: "userGuess"
+    requireNewWord = false;
+  }
+
+  // TestS if a letter guessed is correct
+  var wordComplete = [];
+  selectedWord.objArray.forEach(completeCheck);
+
+  // letters remaining to be guessed
+  if (wordComplete.includes(false)) {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "Guess this Philadelphia themed word!",
+          name: "userinput"
+        }
+      ])
+      .then(function(input) {
+        if (
+          !letterArray.includes(input.userinput) ||
+          input.userinput.length > 1
+        ) {
+          console.log("\nPlease try again!\n");
+          theLogic();
+        } else {
+          if (
+            incorrectLetters.includes(input.userinput) ||
+            correctLetters.includes(input.userinput) ||
+            input.userinput === ""
+          ) {
+            console.log("\nAlready guessed or nothing entered. Please try again\n");
+            theLogic();
+          } else {
+            // Checks if guess is correct
+            var wordCheckArray = [];
+
+            selectedWord.userGuess(input.userinput);
+
+            // Checks if guess is correct
+            selectedWord.objArray.forEach(wordCheck);
+            if (wordCheckArray.join("") === wordComplete.join("")) {
+              console.log("\nIncorrect\n");
+
+              incorrectLetters.push(input.userinput);
+              remainingGuesses--;
+            } else {
+              console.log("\nCorrect!\n");
+
+              correctLetters.push(input.userinput);
             }
-        ]).then(function(input) {
-            if (!letterArray.includes(input.userGuess) || input.userGuess.length > 1) {
-                console.log("\nPlease try again!\n");
-                theLogic();
-            }
-            else {
-                if(incorrectLetters.includes(input.userGuess) || correctLetters.includes(input.userGuess) || input.userGuess === "") {
-                    console.log("\nAlready guessed or nothing entered\n");
-                }
+
+            selectedWord.log();
+
+            // Print guesses left
+            console.log("Guesses Left: " + remainingGuesses + "\n");
+
+            // Print letters guessed already
+            console.log(
+              "Letters Guessed: " + incorrectLetters.join(" ") + "\n"
+            );
+
+            // Guesses left
+            if (remainingGuesses > 0) {
+              // Call function
+              theLogic();
+            } else {
+              console.log("Sorry, you lose!\n");
+
+              restartGame();
             }
 
+            function wordCheck(key) {
+              wordCheckArray.push(key.guessed);
+            }
+          }
+        }
+      });
+  } else {
+    console.log("YOU'RE A WINNER!\n");
 
-        })
-    }else {
-        console.log("YOU'RE A WINNER!\n");
-    }
+    restartGame();
+  }
+
+  function completeCheck(key) {
+    wordComplete.push(key.guessed);
+  }
 }
+
+function restartGame() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Would you like to:",
+        choices: ["Play Again", "Exit"],
+        name: "restart"
+      }
+    ])
+    .then(function(input) {
+      if (input.restart === "Play Again") {
+        requireNewWord = true;
+        incorrectLetters = [];
+        correctLetters = [];
+        remainingGuesses = 10;
+        theLogic();
+      } else {
+        return;
+      }
+    });
+}
+
+theLogic();
+
 // var checkWinOrLose = "start"
 // function startGame() {
 //     inquirer.prompt({

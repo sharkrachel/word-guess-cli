@@ -10,41 +10,31 @@
 //a function that will take an argument (character) and check it, update to true if it's guessed correctely.
 
 //constructor function for the character and the guess boolean
-var Letter = function (character) {
-    this.character = character;
-    this.guess = false;
-
-    this.toString = function () {
-        if (this.character === " ") {
-            this.guess = true;
-            return " ";
+function Letter(value) {
+    this.letter = value;
+    this.guessed = false;
+  
+    this.toString = function() {
+      if (this.letter === " ") {
+        this.guessed = true;
+        return " ";
+      } else {
+        if (this.guessed === false) {
+          return "_";
+        } else {
+          return this.letter;
         }
-        else {
-            if (this.guess === false) {
-                return "_";
-            }
-            else {
-                return this.character
-            }
-        }
-    }
-    this.display = function () {
-        if (this.guessed === true) {
-            return this.character;
-        }
-        else {
-            return "_";
-        }
-    }
-
-    this.checkGuess = function (userguess) {
-        if (userGuess === this.character) {
-            this.guess = true;
-        }
+      }
     };
-}
-
-module.exports = Letter;
+  
+    this.guess = function(guess) {
+      if (guess === this.letter) {
+        this.guessed = true;
+      }
+    };
+  }
+  
+  module.exports = Letter;
 
 
 
