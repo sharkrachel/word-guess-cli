@@ -9,4 +9,4 @@ The word-guess-cli game was made using node.js and the Inquirer prompt. It was a
 
 
 ### Watch it work!
-[DEMO](https://github.com/sharkrachel/word-guess-cli/blob/master/word-guess-cli.mov)
+[DEMO](https://github.com/sharkrachel/word-guess-cli/raw/master/word-guess-cli.mov)
