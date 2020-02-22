@@ -6,3 +6,7 @@ Try to guess a Philadelphia themed word by guessing letters. To win, guess all t
 
 ### How it was made
 The word-guess-cli game was made using node.js and the Inquirer prompt. It was also put together with the help of [this](https://www.youtube.com/watch?v=hnSgRvmTJA4) tutorial.
+
+
+### Watch it work!
+[DEMO]()
